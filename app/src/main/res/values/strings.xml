@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">TrackerGPS</string>
+    <string name="z" />
+    <string name="k" />
+    <string name="o" />
+    <string name="p" />
+    <string name="register">Register</string>
+    <string name="i_agree_to_the_privacy_policy_and_terms_of_service">I agree to the Privacy Policy and Terms of Service</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="join_us_and_explore_new_possibilities">Join us and explore new possibilities</string>
+    <string name="already_have_an_account">Already have an Account?</string>
+    <string name="login">Login</string>
+    <string name="Name">Name</string>
+    <string name="Email">Email</string>
+    <string name="i">Enter your password</string>
+    <string name="PreferredTransport">Preferred Transport</string>
+    <string name="login1">Login</string>
+</resources>
