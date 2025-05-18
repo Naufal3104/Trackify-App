@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
 
                 if (userManager.login(email, password)) {
                     Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, DashboardActivity::class.java)
+                    val intent = Intent(this, DashboardAdmin::class.java)
                     startActivity(intent)
                     finish() // Selesaikan LoginActivity agar tidak bisa kembali dengan back
                 } else {
