@@ -26,7 +26,6 @@ class RegisterActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
         register = UserManager(this)
-        register.createTable()
         editTextName = findViewById(R.id.editTextName)
         editTextEmail = findViewById(R.id.editTextEmail)
         editTextPassword = findViewById(R.id.editTextPassword)
@@ -60,7 +59,7 @@ class RegisterActivity : AppCompatActivity() {
         // Check if fields are not empty
         if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
             if (chkValidation.isChecked){
-                register.addUser (name, email, password, preferred_transport, 0, 0)
+                register.addUser (name, email, password, 1, preferred_transport, 0, 0)
                 Toast.makeText(this, "User  registered successfully", Toast.LENGTH_SHORT).show()
                 clearFields()
                 val intent = Intent(this, LoginActivity::class.java)
