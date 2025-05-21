@@ -13,6 +13,12 @@
         android:theme="@style/Theme.TrackerGPS"
         tools:targetApi="31">
         <activity
+            android:name=".ProfileAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".ManageAdmin"
+            android:exported="false" />
+        <activity
             android:name=".DashboardAdmin"
             android:exported="false" />
         <activity

@@ -13,7 +13,7 @@ class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     }
 
     override fun onCreate(db: SQLiteDatabase){
-        val createTable = """
+        val createUsersTable = """
             CREATE TABLE IF NOT EXISTS ${UserManager.TABLE_NAME} (
                 ${UserManager.ID} INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 ${UserManager.NAME} TEXT NOT NULL,
@@ -25,7 +25,19 @@ class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 ${UserManager.REWARD_POINTS} INTEGER NOT NULL
             );
         """.trimIndent()
-        db.execSQL(createTable)
+        db.execSQL(createUsersTable)
+
+        val createVouchersTable = """
+            CREATE TABLE IF NOT EXISTS ${VoucherManager.VOUCHERS_TABLE_NAME} (
+                ${VoucherManager.VOUCHERS_ID} INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                ${VoucherManager.VOUCHERS_TITLE} TEXT NOT NULL,
+                ${VoucherManager.VOUCHERS_DESCRIPTION} TEXT NOT NULL,
+                ${VoucherManager.VOUCHERS_POINTS_REQUIRED} INTEGER NOT NULL,
+                ${VoucherManager.VOUCHERS_EXPIRY_DATE} DATE NOT NULL,
+                ${VoucherManager.VOUCHERS_STOCK} INTEGER NOT NULL
+            );
+        """.trimIndent()
+        db.execSQL(createVouchersTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int){

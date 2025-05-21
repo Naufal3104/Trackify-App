@@ -18,20 +18,6 @@ class UserManager(context: Context) {
         const val REWARD_POINTS = "reward_points"
     }
 
-//    fun createTable(){
-//        val db = dbManager.writableDatabase
-//        val createTable = "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-//                "$NAME TEXT NOT NULL, " +
-//                "$EMAIL TEXT NOT NULL, " +
-//                "$PASSWORD TEXT NOT NULL, " +
-//                "$ROLE INT NOT NULL, " +
-//                "$PREFERRED_TRANSPORT TEXT NOT NULL, " +
-//                "$TOTAL_DISTANCE INT NOT NULL, " +
-//                "$REWARD_POINTS INT NOT NULL)"
-//        db.execSQL(createTable)
-//        db.close()
-//    }
-
     fun addUser (name: String, email: String, password: String, role: Int, preferred_transport: String, total_distance: Int, reward_points: Int) {
         val db = dbManager.writableDatabase
         val values = ContentValues()

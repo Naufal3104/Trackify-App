@@ -6,20 +6,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import com.example.trackergps.databinding.ActivityDashboardAdminBinding
+import com.example.trackergps.databinding.ActivityManageAdminBinding
+import com.example.trackergps.databinding.ActivityProfileAdminBinding
 import com.example.trackergps.fragment.Home
 import com.example.trackergps.fragment.Manage
 import com.example.trackergps.fragment.Profile
 
-class DashboardAdmin : AppCompatActivity() {
+class ProfileAdmin : AppCompatActivity() {
 
-    private lateinit var binding: ActivityDashboardAdminBinding
+    private lateinit var binding: ActivityProfileAdminBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDashboardAdminBinding.inflate(layoutInflater)
+        binding = ActivityProfileAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        replaceFragment(Home())
+        replaceFragment(Manage())
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -35,9 +36,7 @@ class DashboardAdmin : AppCompatActivity() {
             }
             true
         }
-
     }
-
     private fun replaceFragment(fragment: Fragment){
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
