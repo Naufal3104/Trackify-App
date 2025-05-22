@@ -32,22 +32,28 @@ class LoginActivity : AppCompatActivity() {
             val password = editTextPasswordLogin.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                userManager.createTable()  // Pastikan tabel sudah ada sebelum login
                 val cursor = userManager.getAllUsers()
 
                 if (cursor.moveToFirst()) {
                     do {
                         val dbEmail = cursor.getString(cursor.getColumnIndexOrThrow("email"))
                         val dbPassword = cursor.getString(cursor.getColumnIndexOrThrow("password"))
-                        println("User di DB: $dbEmail - $dbPassword")
+                        println("User  di DB: $dbEmail - $dbPassword")
                     } while (cursor.moveToNext())
                 }
 
-                if (userManager.login(email, password)) {
+                val role = userManager.login(email, password)
+                if (role != null) {
                     Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, DashboardActivity::class.java)
-                    startActivity(intent)
-                    finish() // Selesaikan LoginActivity agar tidak bisa kembali dengan back
+                    if (role == 0) {
+                        val intent = Intent(this, DashboardAdmin::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else if(role == 1) {
+                        val intent = Intent(this, DashboardActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                 } else {
                     Toast.makeText(this, "Invalid email or password!", Toast.LENGTH_SHORT).show()
                 }
@@ -55,7 +61,6 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please fill all fields!", Toast.LENGTH_SHORT).show()
             }
         }
-
 
         textSignIn.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)

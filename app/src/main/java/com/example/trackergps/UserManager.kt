@@ -7,35 +7,24 @@ import android.database.Cursor
 class UserManager(context: Context) {
     private val dbManager = DatabaseManager(context)
     companion object {
-        private const val TABLE_NAME = "users"
-        private const val ID = "_id"
-        private const val NAME = "name"
-        private const val EMAIL = "email"
-        private const val PASSWORD = "password"
-        private const val PREFERRED_TRANSPORT = "preferred_transport"
-        private const val TOTAL_DISTANCE = "total_distance"
-        private const val REWARD_POINTS = "reward_points"
+        const val TABLE_NAME = "users"
+        const val ID = "_id"
+        const val NAME = "name"
+        const val EMAIL = "email"
+        const val PASSWORD = "password"
+        const val ROLE = "role"
+        const val PREFERRED_TRANSPORT = "preferred_transport"
+        const val TOTAL_DISTANCE = "total_distance"
+        const val REWARD_POINTS = "reward_points"
     }
 
-    fun createTable(){
-        val db = dbManager.writableDatabase
-        val createTable = "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                "$NAME TEXT NOT NULL, " +
-                "$EMAIL TEXT NOT NULL, " +
-                "$PASSWORD TEXT NOT NULL, " +
-                "$PREFERRED_TRANSPORT TEXT NOT NULL, " +
-                "$TOTAL_DISTANCE INT NOT NULL, " +
-                "$REWARD_POINTS INT NOT NULL)"
-        db.execSQL(createTable)
-        db.close()
-    }
-
-    fun addUser (name: String, email: String, password: String, preferred_transport: String, total_distance: Int, reward_points: Int) {
+    fun addUser (name: String, email: String, password: String, role: Int, preferred_transport: String, total_distance: Int, reward_points: Int) {
         val db = dbManager.writableDatabase
         val values = ContentValues()
         values.put(NAME, name)
         values.put(EMAIL, email)
         values.put(PASSWORD, password)
+        values.put(ROLE, role)
         values.put(PREFERRED_TRANSPORT, preferred_transport)
         values.put(TOTAL_DISTANCE, total_distance)
         values.put(REWARD_POINTS, reward_points)
@@ -54,17 +43,28 @@ class UserManager(context: Context) {
         db.close()
     }
 
-    fun login(email: String, password: String): Boolean{
+    fun login(email: String, password: String): Int? {
         val db = dbManager.readableDatabase
         val cursor: Cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $EMAIL = ? AND $PASSWORD = ?", arrayOf(email, password))
-
-        val userExists = cursor.count > 0
-        if (userExists) {
-            println("Login berhasil untuk email: $email") // Debugging
+        if (cursor.moveToFirst()) {
+            val role = cursor.getInt(cursor.getColumnIndexOrThrow("role")) // Ambil role dari database
+            cursor.close()
+            return role
         } else {
-            println("Login gagal untuk email: $email") // Debugging
+            cursor.close()
+            return null
         }
-        cursor.close()
-        return userExists
+    }
+
+    fun initializeAdminUser () {
+        addUser (
+            name = "Admin",
+            email = "admin@gmail.com",
+            password = "admin",
+            role = 0,
+            preferred_transport = "0",
+            total_distance = 0,
+            reward_points = 0
+        )
     }
 }

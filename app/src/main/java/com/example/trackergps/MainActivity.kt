@@ -9,7 +9,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var userManager: UserManager
     override fun onCreate(savedInstanceState: Bundle?) {
+        userManager = UserManager(this)
+        userManager.initializeAdminUser()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
