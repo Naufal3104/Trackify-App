@@ -17,6 +17,7 @@ class UserManager(context: Context) {
         const val PREFERRED_TRANSPORT = "preferred_transport"
         const val TOTAL_DISTANCE = "total_distance"
         const val REWARD_POINTS = "reward_points"
+        private var loggedInUserId: Int = -1
     }
 
     fun addUser (name: String, email: String, password: String, role: Int, preferred_transport: String, total_distance: Int, reward_points: Int) {
@@ -58,13 +59,18 @@ class UserManager(context: Context) {
         db.close()
     }
 
+    fun UserSession(): Int{
+        return loggedInUserId
+    }
 
     fun login(email: String, password: String): Int? {
         val db = dbManager.readableDatabase
         val cursor: Cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $EMAIL = ? AND $PASSWORD = ?", arrayOf(email, password))
         if (cursor.moveToFirst()) {
-            val role = cursor.getInt(cursor.getColumnIndexOrThrow("role")) // Ambil role dari database
+            val role = cursor.getInt(cursor.getColumnIndexOrThrow("role")) 
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow("_id"))
             cursor.close()
+            loggedInUserId = id
             return role
         } else {
             cursor.close()

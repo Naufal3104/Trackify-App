@@ -3,7 +3,6 @@ package com.example.trackergps
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 
 class ActivityManager(context: Context) {
     private val dbManager = DatabaseManager(context)
@@ -17,6 +16,7 @@ class ActivityManager(context: Context) {
         const val DURATION = "duration"
         const val DATE = "date"
         const val POINTS_EARNED = "points_earned"
+        const val VEHICLE = "vehicle"
     }
 
     fun addActivity(
@@ -25,7 +25,8 @@ class ActivityManager(context: Context) {
         distance: Float,
         duration: Float,
         date: String, // Pertimbangkan menggunakan tipe data tanggal yang lebih kuat jika diperlukan
-        pointsEarned: Int
+        pointsEarned: Int,
+        vehicle: String
     ) {
         val db = dbManager.writableDatabase
         val values = ContentValues().apply {
@@ -35,6 +36,7 @@ class ActivityManager(context: Context) {
             put(DURATION, duration)
             put(DATE, date)
             put(POINTS_EARNED, pointsEarned)
+            put(VEHICLE, vehicle)
         }
         db.insert(TABLE_NAME, null, values)
         db.close()
@@ -62,7 +64,8 @@ class ActivityManager(context: Context) {
         distance: Float,
         duration: Float,
         date: String,
-        pointsEarned: Int
+        pointsEarned: Int,
+        vehicle: String
     ): Int {
         val db = dbManager.writableDatabase
         val values = ContentValues().apply {
@@ -71,6 +74,7 @@ class ActivityManager(context: Context) {
             put(DURATION, duration)
             put(DATE, date)
             put(POINTS_EARNED, pointsEarned)
+            put(VEHICLE, vehicle)
         }
         val rowsAffected = db.update(TABLE_NAME, values, "$ID = ?", arrayOf(id.toString()))
         db.close()
