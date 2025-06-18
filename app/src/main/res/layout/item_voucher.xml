@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/item_user_background"> <!-- Bisa pakai background yang sama -->
+
+    <TextView
+        android:id="@+id/textViewVoucherTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Judul Voucher"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="?android:attr/textColorPrimary" />
+
+    <TextView
+        android:id="@+id/textViewVoucherDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ini adalah deskripsi singkat dari voucher."
+        android:layout_marginTop="4dp"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/textViewPointsStock"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Poin: 100 - Stok: 50"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorPrimary"/>
+
+        <TextView
+            android:id="@+id/textViewExpiryDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Berlaku hingga: 2025-12-31"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

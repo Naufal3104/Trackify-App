@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/item_user_background">
+
+    <TextView
+        android:id="@+id/textViewActivityInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User ID: 1 - Tipe: Lari"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="?android:attr/textColorPrimary" />
+
+    <TextView
+        android:id="@+id/textViewMetrics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jarak: 5.2 km - Durasi: 30.5 menit"
+        android:layout_marginTop="4dp"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/textViewDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tanggal: 2025-06-18"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/textViewPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Poin: 50"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorPrimary"/>
+    </LinearLayout>
+
+</LinearLayout>
