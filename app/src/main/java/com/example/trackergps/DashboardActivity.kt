@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.trackergps.admin.Manage
 //import com.example.trackergps.admin.ProfileActivity
 import com.example.trackergps.databinding.ActivityDashboardBinding
 import java.util.Calendar
@@ -38,6 +39,11 @@ class DashboardActivity : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
+                    true
+                }
+                R.id.activity -> {
+                    val intent = Intent(this, UserActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.profile -> {

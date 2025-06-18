@@ -1,6 +1,7 @@
 package com.example.trackergps.admin
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -93,6 +94,8 @@ class ManageVoucher : AppCompatActivity() {
     private fun setupClickListeners() {
         binding.buttonBack.setOnClickListener {
             finish()
+            val intent = Intent(this, Manage::class.java)
+            startActivity(intent)
         }
 
         binding.buttonAdd.setOnClickListener {

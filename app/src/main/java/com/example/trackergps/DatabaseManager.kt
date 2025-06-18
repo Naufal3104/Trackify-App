@@ -41,17 +41,18 @@ class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
         // Tabel Activities
         val createActivitiesTable = """
-            CREATE TABLE IF NOT EXISTS ${ActivityManager.TABLE_NAME} (
-                ${ActivityManager.ID} INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                ${ActivityManager.USER_ID} INTEGER NOT NULL,
-                ${ActivityManager.TYPE} TEXT NOT NULL,
-                ${ActivityManager.DISTANCE} REAL NOT NULL,
-                ${ActivityManager.DURATION} REAL NOT NULL,
-                ${ActivityManager.DATE} TEXT NOT NULL,
-                ${ActivityManager.POINTS_EARNED} INTEGER NOT NULL,
-                FOREIGN KEY(${ActivityManager.USER_ID}) REFERENCES ${UserManager.TABLE_NAME}(${UserManager.ID})
-            );
-        """.trimIndent()
+        CREATE TABLE IF NOT EXISTS ${ActivityManager.TABLE_NAME} (
+            ${ActivityManager.ID} INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            ${ActivityManager.USER_ID} INTEGER NOT NULL,
+            ${ActivityManager.TYPE} TEXT NOT NULL,
+            ${ActivityManager.DISTANCE} REAL NOT NULL,
+            ${ActivityManager.DURATION} REAL NOT NULL,
+            ${ActivityManager.DATE} TEXT NOT NULL,
+            ${ActivityManager.POINTS_EARNED} INTEGER NOT NULL,
+            ${ActivityManager.VEHICLE} TEXT NOT NULL, -- DITAMBAH: Kolom ini yang hilang
+            FOREIGN KEY(${ActivityManager.USER_ID}) REFERENCES ${UserManager.TABLE_NAME}(${UserManager.ID})
+        );
+    """.trimIndent()
         db.execSQL(createActivitiesTable)
 
         // --- Tambahan untuk Tabel Redeemed Vouchers ---

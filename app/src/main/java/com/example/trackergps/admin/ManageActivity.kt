@@ -1,6 +1,7 @@
 package com.example.trackergps.admin
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,9 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trackergps.ActivityManager
 import com.example.trackergps.R
+import com.example.trackergps.UserActivity
 import com.example.trackergps.databinding.ActivityManageActivityBinding
 
-// Data class untuk menampung data aktivitas
+// 1. PERBARUI DATA CLASS: Tambahkan properti 'vehicle'
 data class Activity(
     val id: Int,
     val userId: Int,
@@ -25,7 +27,8 @@ data class Activity(
     val distance: Float,
     val duration: Float,
     val date: String,
-    val pointsEarned: Int
+    val pointsEarned: Int,
+    val vehicle: String // DITAMBAH
 )
 
 class ManageActivity : AppCompatActivity() {
@@ -55,7 +58,9 @@ class ManageActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         activityAdapter = ActivityAdapter { activity ->
             selectedActivity = activity
+            // 2. PERBARUI RECYCLER VIEW SETUP: Tampilkan data 'vehicle' di form
             binding.editTextType.setText(activity.type)
+            binding.editTextVehicle.setText(activity.vehicle) // DITAMBAH
             binding.editTextDistance.setText(activity.distance.toString())
             binding.editTextDuration.setText(activity.duration.toString())
             binding.editTextDate.setText(activity.date)
@@ -73,6 +78,7 @@ class ManageActivity : AppCompatActivity() {
         val activities = mutableListOf<Activity>()
         if (cursor.moveToFirst()) {
             do {
+                // 3. PERBARUI LOAD DATA: Ambil data 'vehicle' dari database
                 activities.add(
                     Activity(
                         id = cursor.getInt(cursor.getColumnIndex(ActivityManager.ID)),
@@ -81,7 +87,8 @@ class ManageActivity : AppCompatActivity() {
                         distance = cursor.getFloat(cursor.getColumnIndex(ActivityManager.DISTANCE)),
                         duration = cursor.getFloat(cursor.getColumnIndex(ActivityManager.DURATION)),
                         date = cursor.getString(cursor.getColumnIndex(ActivityManager.DATE)),
-                        pointsEarned = cursor.getInt(cursor.getColumnIndex(ActivityManager.POINTS_EARNED))
+                        pointsEarned = cursor.getInt(cursor.getColumnIndex(ActivityManager.POINTS_EARNED)),
+                        vehicle = cursor.getString(cursor.getColumnIndex(ActivityManager.VEHICLE)) // DITAMBAH
                     )
                 )
             } while (cursor.moveToNext())
@@ -93,27 +100,31 @@ class ManageActivity : AppCompatActivity() {
     private fun setupClickListeners() {
         binding.buttonBack.setOnClickListener {
             finish()
+            val intent = Intent(this, Manage::class.java)
+            startActivity(intent)
         }
 
+        // 4. PERBARUI TOMBOL TAMBAH: Sertakan data 'vehicle'
         binding.buttonAdd.setOnClickListener {
-            // Catatan: Untuk 'Add', User ID perlu ditentukan. Di sini kita hardcode '1' sebagai contoh.
-            // Dalam aplikasi nyata, mungkin perlu dropdown untuk memilih user.
-            val userId = 1
+            val userId = 1 // Contoh
             val type = binding.editTextType.text.toString().trim()
+            val vehicle = binding.editTextVehicle.text.toString().trim() // DITAMBAH
             val distance = binding.editTextDistance.text.toString().toFloatOrNull() ?: 0f
             val duration = binding.editTextDuration.text.toString().toFloatOrNull() ?: 0f
             val date = binding.editTextDate.text.toString().trim()
             val points = binding.editTextPoints.text.toString().toIntOrNull() ?: 0
 
-            if (type.isNotEmpty() && date.isNotEmpty()) {
-                activityManager.addActivity(userId, type, distance, duration, date, points)
+            if (type.isNotEmpty() && date.isNotEmpty() && vehicle.isNotEmpty()) {
+                // Panggil fungsi dengan parameter 'vehicle'
+                activityManager.addActivity(userId, type, distance, duration, date, points, vehicle)
                 Toast.makeText(this, "Aktivitas berhasil ditambahkan", Toast.LENGTH_SHORT).show()
                 clearFormAndRefresh()
             } else {
-                Toast.makeText(this, "Tipe dan Tanggal tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Tipe, Kendaraan, dan Tanggal tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
         }
 
+        // 5. PERBARUI TOMBOL EDIT: Sertakan data 'vehicle'
         binding.buttonEdit.setOnClickListener {
             if (selectedActivity == null) {
                 Toast.makeText(this, "Pilih aktivitas yang akan diedit", Toast.LENGTH_SHORT).show()
@@ -121,17 +132,19 @@ class ManageActivity : AppCompatActivity() {
             }
 
             val type = binding.editTextType.text.toString().trim()
+            val vehicle = binding.editTextVehicle.text.toString().trim() // DITAMBAH
             val distance = binding.editTextDistance.text.toString().toFloatOrNull() ?: 0f
             val duration = binding.editTextDuration.text.toString().toFloatOrNull() ?: 0f
             val date = binding.editTextDate.text.toString().trim()
             val points = binding.editTextPoints.text.toString().toIntOrNull() ?: 0
 
-            if (type.isNotEmpty() && date.isNotEmpty()) {
-                activityManager.updateActivity(selectedActivity!!.id, type, distance, duration, date, points)
+            if (type.isNotEmpty() && date.isNotEmpty() && vehicle.isNotEmpty()) {
+                // Panggil fungsi dengan parameter 'vehicle'
+                activityManager.updateActivity(selectedActivity!!.id, type, distance, duration, date, points, vehicle)
                 Toast.makeText(this, "Aktivitas berhasil diupdate", Toast.LENGTH_SHORT).show()
                 clearFormAndRefresh()
             } else {
-                Toast.makeText(this, "Tipe dan Tanggal tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Tipe, Kendaraan, dan Tanggal tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -149,6 +162,7 @@ class ManageActivity : AppCompatActivity() {
     private fun clearFormAndRefresh() {
         selectedActivity = null
         binding.editTextType.text?.clear()
+        binding.editTextVehicle.text?.clear() // DITAMBAH: Kosongkan form vehicle
         binding.editTextDistance.text?.clear()
         binding.editTextDuration.text?.clear()
         binding.editTextDate.text?.clear()
@@ -194,8 +208,9 @@ class ActivityAdapter(private val onItemClick: (Activity) -> Unit) :
 
         @SuppressLint("SetTextI18n")
         fun bind(activity: Activity) {
-            activityInfo.text = "User ID: ${activity.userId} - Tipe: ${activity.type}"
-            metrics.text = "Jarak: ${activity.distance} km - Durasi: ${activity.duration} menit"
+            // PERBARUI TAMPILAN ITEM: Tampilkan juga data vehicle
+            activityInfo.text = "User ID: ${activity.userId} - Tipe: ${activity.type} (${activity.vehicle})"
+            metrics.text = "Jarak: %.0f m - Durasi: %.0f d".format(activity.distance, activity.duration)
             date.text = "Tanggal: ${activity.date}"
             points.text = "Poin: ${activity.pointsEarned}"
         }

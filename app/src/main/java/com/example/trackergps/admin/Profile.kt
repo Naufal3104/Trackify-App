@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.trackergps.R
 import com.example.trackergps.databinding.ActivityProfileBinding
+import com.example.trackergps.LoginActivity
 
 // --- PERUBAHAN ---
 // Pastikan Anda sudah membuat Activity untuk login, contohnya LoginActivity.kt
@@ -63,20 +64,26 @@ class Profile : AppCompatActivity() {
         // --- AKHIR PERUBAHAN ---
     }
 
-    // --- FUNGSI BARU DITAMBAHKAN ---
     private fun performLogout() {
-        // 1. Hapus Sesi Pengguna dari SharedPreferences
-        // Ganti "MyAppPrefs" dengan nama file preferensi yang Anda gunakan saat login
+        // 1. Hapus Sesi Pengguna dari SharedPreferences (Bagian ini sudah benar)
         val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.clear() // Menghapus semua data sesi (token, status login, dll)
         editor.apply()
 
-        // 2. Arahkan ke Halaman Login dan Bersihkan Riwayat Activity
+        // 2. Arahkan ke Halaman Login dan Bersihkan Riwayat Activity (INI BAGIAN YANG DIPERBAIKI)
         Toast.makeText(this, "Anda telah keluar.", Toast.LENGTH_SHORT).show()
-        startActivity(Intent(this, LoginActivity::class.java))
+        val intent = Intent(this, LoginActivity::class.java)
+
+        // DITAMBAH: Flag ini adalah kunci untuk membersihkan semua activity sebelumnya.
+        // Ini akan membuat tugas (task) baru untuk LoginActivity dan menghapus tugas lama.
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        startActivity(intent)
+
+        // DITAMBAH: Panggil finish() untuk memastikan Activity Profile saat ini langsung ditutup.
+        finish()
     }
-    // --- AKHIR FUNGSI BARU ---
 
     private fun setupBottomNavigation() {
         binding.bottomNavigationView.selectedItemId = R.id.profile

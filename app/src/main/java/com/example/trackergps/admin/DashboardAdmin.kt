@@ -29,6 +29,8 @@ class DashboardAdmin : AppCompatActivity() {
         }
 
         // Menetapkan listener untuk BottomNavigationView
+        val bottomNavigationView = binding.bottomNavigationView
+        bottomNavigationView.selectedItemId = R.id.home
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {

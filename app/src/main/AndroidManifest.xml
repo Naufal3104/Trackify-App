@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,14 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TrackerGPS"
         tools:targetApi="31">
+
+        <service
+            android:name=".LocationService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
         <activity
             android:name=".UserActivity"
-            android:exported="false" />
-        <activity
-            android:name=".profile_user"
-            android:exported="false" />
-        <activity
-            android:name=".mulai_aktivitas"
             android:exported="false" />
         <activity
             android:name=".admin.ManageActivity"
@@ -35,12 +39,6 @@
             android:exported="false" />
         <activity
             android:name=".admin.Manage"
-            android:exported="false" />
-        <activity
-            android:name=".ProfileAdmin"
-            android:exported="false" />
-        <activity
-            android:name=".ManageAdmin"
             android:exported="false" />
         <activity
             android:name=".admin.DashboardAdmin"

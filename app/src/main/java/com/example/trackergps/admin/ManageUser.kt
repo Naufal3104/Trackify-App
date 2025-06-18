@@ -1,6 +1,7 @@
 package com.example.trackergps.admin
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -88,6 +89,8 @@ class ManageUser : AppCompatActivity() {
     private fun setupClickListeners() {
         binding.buttonBack.setOnClickListener {
             finish() // Kembali ke activity sebelumnya
+            val intent = Intent(this, Manage::class.java)
+            startActivity(intent)
         }
 
         binding.buttonAdd.setOnClickListener {
