@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="darker_hint_color">#666666</color>
     <color name="Primary">#169976</color>
     <color name="Secondary">#1DCD9F</color>
     <color name="White">#FFFFFF</color>
@@ -141,5 +142,5 @@
     <color name="MediumBlue">#0000CD</color>
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
-    <color name="Black">#000000</color>
+    <color name="black">#000000</color>
 </resources>

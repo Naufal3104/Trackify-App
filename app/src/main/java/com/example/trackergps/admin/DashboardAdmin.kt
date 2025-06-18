@@ -1,15 +1,13 @@
-package com.example.trackergps
+package com.example.trackergps.admin
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
+import com.example.trackergps.R
 import com.example.trackergps.databinding.ActivityDashboardAdminBinding
-import com.example.trackergps.fragment.Home
-import com.example.trackergps.fragment.Manage
-import com.example.trackergps.fragment.Profile
 
 class DashboardAdmin : AppCompatActivity() {
 
@@ -17,31 +15,39 @@ class DashboardAdmin : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+
+        // Inisialisasi View Binding untuk mengakses elemen UI
         binding = ActivityDashboardAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        replaceFragment(Home())
+
+        // Penanganan insets jendela untuk memastikan konten tidak tertutup oleh status/nav bar
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // Menetapkan listener untuk BottomNavigationView
+        val bottomNavigationView = binding.bottomNavigationView
+        bottomNavigationView.selectedItemId = R.id.home
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.home -> replaceFragment(Home())
-                R.id.manage -> replaceFragment(Manage())
-                R.id.profile -> replaceFragment(Profile())
-                else -> {
+                R.id.home -> {
+                    true
                 }
+                R.id.manage -> {
+                    val intent = Intent(this, Manage::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.profile -> {
+                    val intent = Intent(this, Profile::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
             }
-            true
         }
-
-    }
-
-    private fun replaceFragment(fragment: Fragment){
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frame_layout, fragment)
-        fragmentTransaction.commit()
     }
 }
