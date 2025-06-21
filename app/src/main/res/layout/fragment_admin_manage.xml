@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    tools:context=".admin.AdminFragmentManage">
+
+    <!-- Judul Halaman -->
+    <TextView
+        android:id="@+id/tvManageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="Pusat Manajemen"
+        android:textColor="#212121"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Tombol 1: Kelola Pengguna -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnManageUsers"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="Kelola Pengguna"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:backgroundTint="#16C79A"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnManageActivities"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvManageTitle"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <!-- Tombol 2: Kelola Aktivitas -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnManageActivities"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:text="Kelola Aktivitas"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:backgroundTint="#16C79A"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnManageVouchers"
+        app:layout_constraintEnd_toEndOf="@+id/btnManageUsers"
+        app:layout_constraintStart_toStartOf="@+id/btnManageUsers"
+        app:layout_constraintTop_toBottomOf="@+id/btnManageUsers" />
+
+    <!-- Tombol 3: Kelola Voucher -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnManageVouchers"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:text="Kelola Voucher"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:backgroundTint="#16C79A"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnManageReports"
+        app:layout_constraintEnd_toEndOf="@+id/btnManageActivities"
+        app:layout_constraintStart_toStartOf="@+id/btnManageActivities"
+        app:layout_constraintTop_toBottomOf="@+id/btnManageActivities" />
+
+    <!-- Tombol 4: Laporan & Analitik -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnManageReports"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:text="Laporan &amp; Analitik"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:backgroundTint="#16C79A"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnManageVouchers"
+        app:layout_constraintStart_toStartOf="@+id/btnManageVouchers"
+        app:layout_constraintTop_toBottomOf="@+id/btnManageVouchers" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

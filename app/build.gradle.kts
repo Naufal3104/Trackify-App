@@ -52,4 +52,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.2")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 }

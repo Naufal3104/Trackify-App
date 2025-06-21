@@ -1,8 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.TrackerGPS" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- UBAH BARIS INI -->
+        <item name="colorPrimary">#16C79A</item>
+
+        <!-- ANDA JUGA BISA MENYESUAIKAN WARNA LAIN JIKA PERLU -->
+        <item name="colorPrimaryVariant">#11999E</item>
+        <item name="colorOnPrimary">@color/Primary</item>
+
+        <!-- ... sisa tema Anda ... -->
     </style>
 
     <style name="Theme.TrackerGPS" parent="Base.Theme.TrackerGPS" />

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="Primary">#169976</color>
-    <color name="Secondary">#1DCD9F</color>
+    <color name="darker_hint_color">#666666</color>
+    <color name="Primary">#16c79A</color>
+    <color name="Secondary">#16b79A</color>
     <color name="White">#FFFFFF</color>
     <color name="Ivory">#FFFFF0</color>
     <color name="LightYellow">#FFFFE0</color>
+    <color name="trackify_green_light_selection">#E0F2F1</color>
     <color name="Yellow">#FFFF00</color>
     <color name="Snow">#FFFAFA</color>
     <color name="FloralWhite">#FFFAF0</color>
