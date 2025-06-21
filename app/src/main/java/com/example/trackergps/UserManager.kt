@@ -3,7 +3,6 @@ package com.example.trackergps
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import android.util.Log
 
 class UserManager(context: Context) {
     private val dbManager = DatabaseManager(context)
@@ -17,21 +16,78 @@ class UserManager(context: Context) {
         const val PREFERRED_TRANSPORT = "preferred_transport"
         const val TOTAL_DISTANCE = "total_distance"
         const val REWARD_POINTS = "reward_points"
+        const val PROFILE_IMAGE_URI = "profile_image_uri"
         private var loggedInUserId: Int = -1
     }
 
     fun addUser (name: String, email: String, password: String, role: Int, preferred_transport: String, total_distance: Int, reward_points: Int) {
         val db = dbManager.writableDatabase
-        val values = ContentValues()
-        values.put(NAME, name)
-        values.put(EMAIL, email)
-        values.put(PASSWORD, password)
-        values.put(ROLE, role)
-        values.put(PREFERRED_TRANSPORT, preferred_transport)
-        values.put(TOTAL_DISTANCE, total_distance)
-        values.put(REWARD_POINTS, reward_points)
+        val values = ContentValues().apply {
+            put(NAME, name)
+            put(EMAIL, email)
+            put(PASSWORD, password)
+            put(ROLE, role)
+            put(PREFERRED_TRANSPORT, preferred_transport)
+            put(TOTAL_DISTANCE, total_distance)
+            put(REWARD_POINTS, reward_points)
+        }
         db.insert(TABLE_NAME, null, values)
         db.close()
+    }
+
+    fun updateUserProfileData(userId: Int, name: String, email: String, newPassword: String?) {
+        val db = dbManager.writableDatabase
+        val values = ContentValues().apply {
+            put(NAME, name)
+            put(EMAIL, email)
+            if (!newPassword.isNullOrBlank()) {
+                put(PASSWORD, newPassword)
+            }
+        }
+        db.update(TABLE_NAME, values, "$ID = ?", arrayOf(userId.toString()))
+        db.close()
+    }
+
+    fun updateUserProfileImage(userId: Int, imageUri: String) {
+        val db = dbManager.writableDatabase
+        val values = ContentValues().apply {
+            put(PROFILE_IMAGE_URI, imageUri)
+        }
+        db.update(TABLE_NAME, values, "$ID = ?", arrayOf(userId.toString()))
+        db.close()
+    }
+
+    /**
+     * Mengurangi poin pengguna.
+     * @return true jika poin berhasil dikurangi, false jika poin tidak cukup.
+     */
+    fun deductPoints(userId: Int, pointsToDeduct: Int): Boolean {
+        val db = dbManager.writableDatabase
+        val userCursor = getUserById(userId)
+        var success = false
+
+        userCursor?.use {
+            if (it.moveToFirst()) {
+                val currentPointsIndex = it.getColumnIndex(REWARD_POINTS)
+                if (currentPointsIndex != -1) {
+                    val currentPoints = it.getInt(currentPointsIndex)
+                    if (currentPoints >= pointsToDeduct) {
+                        val newPoints = currentPoints - pointsToDeduct
+                        val values = ContentValues().apply {
+                            put(REWARD_POINTS, newPoints)
+                        }
+                        db.update(TABLE_NAME, values, "$ID = ?", arrayOf(userId.toString()))
+                        success = true
+                    }
+                }
+            }
+        }
+        // Jangan tutup koneksi db di sini jika Anda akan memanggil fungsi lain setelahnya dalam satu transaksi
+        return success
+    }
+
+    fun logout() {
+        loggedInUserId = -1
     }
 
     fun getAllUsers(): Cursor {
@@ -45,20 +101,6 @@ class UserManager(context: Context) {
         db.close()
     }
 
-    fun updateUser(id: Int, name: String, email: String, password: String, role: Int, preferred_transport: String, total_distance: Int, reward_points: Int) {
-        val db = dbManager.writableDatabase
-        val values = ContentValues()
-        values.put(NAME, name)
-        values.put(EMAIL, email)
-        values.put(PASSWORD, password)
-        values.put(ROLE, role)
-        values.put(PREFERRED_TRANSPORT, preferred_transport)
-        values.put(TOTAL_DISTANCE, total_distance)
-        values.put(REWARD_POINTS, reward_points)
-        db.update(TABLE_NAME, values, "$ID = ?", arrayOf(id.toString()))
-        db.close()
-    }
-
     fun UserSession(): Int{
         return loggedInUserId
     }
@@ -67,7 +109,7 @@ class UserManager(context: Context) {
         val db = dbManager.readableDatabase
         val cursor: Cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $EMAIL = ? AND $PASSWORD = ?", arrayOf(email, password))
         if (cursor.moveToFirst()) {
-            val role = cursor.getInt(cursor.getColumnIndexOrThrow("role")) 
+            val role = cursor.getInt(cursor.getColumnIndexOrThrow("role"))
             val id = cursor.getInt(cursor.getColumnIndexOrThrow("_id"))
             cursor.close()
             loggedInUserId = id

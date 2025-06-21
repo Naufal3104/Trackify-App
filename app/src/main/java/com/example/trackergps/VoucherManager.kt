@@ -4,9 +4,23 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 
+/**
+ * Data class untuk merepresentasikan sebuah objek Voucher.
+ * Didefinisikan di sini agar menjadi satu file dengan Managernya.
+ */
+data class Voucher(
+    val id: Int,
+    val title: String,
+    val description: String,
+    val pointsRequired: Int,
+    val expiryDate: String,
+    val stock: Int
+)
+
 class VoucherManager(context: Context) {
     private val dbManager = DatabaseManager(context)
-    companion object{
+
+    companion object {
         const val VOUCHERS_TABLE_NAME = "vouchers"
         const val VOUCHERS_ID = "id"
         const val VOUCHERS_TITLE = "title"
@@ -48,6 +62,17 @@ class VoucherManager(context: Context) {
     fun deleteVoucher(id: Int) {
         val db = dbManager.writableDatabase
         db.delete(VOUCHERS_TABLE_NAME, "$VOUCHERS_ID = ?", arrayOf(id.toString()))
+        db.close()
+    }
+
+    /**
+     * Mengurangi stok voucher sebanyak 1 setelah berhasil diredeem.
+     * @param voucherId ID dari voucher yang stoknya akan dikurangi.
+     */
+    fun decrementVoucherStock(voucherId: Int) {
+        val db = dbManager.writableDatabase
+        val query = "UPDATE $VOUCHERS_TABLE_NAME SET $VOUCHERS_STOCK = $VOUCHERS_STOCK - 1 WHERE $VOUCHERS_ID = ? AND $VOUCHERS_STOCK > 0"
+        db.execSQL(query, arrayOf(voucherId.toString()))
         db.close()
     }
 }

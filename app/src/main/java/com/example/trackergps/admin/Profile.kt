@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.trackergps.R
 import com.example.trackergps.databinding.ActivityProfileBinding
 import com.example.trackergps.LoginActivity
+import com.example.trackergps.MainActivity
 
 // --- PERUBAHAN ---
 // Pastikan Anda sudah membuat Activity untuk login, contohnya LoginActivity.kt
@@ -109,9 +110,4 @@ class Profile : AppCompatActivity() {
         }
     }
 
-    // --- PERUBAHAN ---
-    // Buat kelas LoginActivity palsu di sini jika Anda belum membuatnya,
-    // agar kode tidak error saat dikompilasi.
-    // Hapus kelas ini jika Anda sudah punya LoginActivity sendiri.
-    class LoginActivity : AppCompatActivity() {}
 }

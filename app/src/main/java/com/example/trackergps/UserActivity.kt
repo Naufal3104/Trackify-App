@@ -18,13 +18,14 @@ import java.util.Locale
 class UserActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUserBinding
-    private var isCurrentlyTracking = false
 
-    // DITAMBAH: Variabel untuk menyimpan data selama sesi aktivitas berlangsung
+    // DIHAPUS: Kita tidak akan bergantung pada variabel lokal ini lagi
+    // private var isCurrentlyTracking = false
+
+    private lateinit var userManager: UserManager
     private var selectedVehicle: String? = null
     private var activityStartTime: Long = 0L
 
-    // DITAMBAH: Cara modern untuk meminta izin
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             var allGranted = true
@@ -40,29 +41,25 @@ class UserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        userManager = UserManager(this)
 
-        // Minta semua izin yang diperlukan saat aplikasi dibuka
         requestAllPermissions()
 
-        // DIUBAH: Logika tombol yang lebih lengkap
         binding.btnStart.setOnClickListener {
-            if (isCurrentlyTracking) {
-                // Jika sedang berjalan, maka hentikan service dan simpan data
+            // DIUBAH: Cek langsung ke sumber kebenaran (LiveData)
+            if (LocationService.isTracking.value == true) {
                 sendCommandToService(LocationService.ACTION_STOP)
                 saveActivityData()
             } else {
-                // Jika akan memulai, ambil data dari UI
                 val vehicle = binding.editTextVehicle.text.toString().trim()
                 if (vehicle.isEmpty()) {
                     Toast.makeText(this, "Silakan masukkan jenis kendaraan terlebih dahulu.", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
 
-                // Simpan data sesi sebelum memulai service
                 this.selectedVehicle = vehicle
                 this.activityStartTime = System.currentTimeMillis()
 
-                // Mulai service
                 sendCommandToService(LocationService.ACTION_START)
             }
         }
@@ -73,14 +70,17 @@ class UserActivity : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
-                    true
-                }
-                R.id.activity -> {
-                    val intent = Intent(this, UserActivity::class.java)
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                     startActivity(intent)
                     true
                 }
+                R.id.activity -> {
+                    true
+                }
                 R.id.profile -> {
+                    val intent = Intent(this, UserProfile::class.java)
+                    startActivity(intent)
                     true
                 }
                 else -> false
@@ -90,16 +90,13 @@ class UserActivity : AppCompatActivity() {
 
     private fun observeServiceData() {
         LocationService.isTracking.observe(this) { isTracking ->
-            this.isCurrentlyTracking = isTracking
+            // DIUBAH: Langsung teruskan nilai dari LiveData ke fungsi UI
             updateButtonUI(isTracking)
         }
 
         LocationService.totalDistance.observe(this) { distanceInMeters ->
             val distanceInKm = distanceInMeters / 1000f
             val distanceText = String.format("%.2f km", distanceInKm)
-
-            // CATATAN: Pastikan Anda punya TextView dengan id 'tvJarak' di XML Anda
-            // Contoh: binding.tvJarak.text = distanceText
             Log.d("UserActivity", "Jarak terbaru: $distanceText")
         }
     }
@@ -107,14 +104,13 @@ class UserActivity : AppCompatActivity() {
     private fun updateButtonUI(isTracking: Boolean) {
         if (isTracking) {
             binding.btnStart.text = "Selesai"
-            binding.editTextVehicle.isEnabled = false // Non-aktifkan input saat berjalan
+            binding.editTextVehicle.isEnabled = false
         } else {
             binding.btnStart.text = "Mulai"
-            binding.editTextVehicle.isEnabled = true // Aktifkan kembali input
+            binding.editTextVehicle.isEnabled = true
         }
     }
 
-    // DIUBAH: Fungsi ini sekarang mengirim aksi yang jelas ke service
     private fun sendCommandToService(action: String) {
         if (action == LocationService.ACTION_START && !hasLocationPermission()) {
             requestAllPermissions()
@@ -132,23 +128,32 @@ class UserActivity : AppCompatActivity() {
         }
     }
 
-    // DITAMBAH: Fungsi untuk mengumpulkan dan menyimpan data aktivitas
     private fun saveActivityData() {
+        // DITAMBAH: Log untuk debugging, untuk memastikan fungsi ini terpanggil
+        Log.d("UserActivity_SAVE_DEBUG", "Fungsi saveActivityData() mulai dijalankan.")
+
         val finalDistance = LocationService.totalDistance.value ?: 0f
         val vehicle = this.selectedVehicle ?: "Tidak Diketahui"
 
         val endTime = System.currentTimeMillis()
         val durationInSeconds = (endTime - activityStartTime) / 1000f
 
-        val userId = 1 // Ganti dengan ID pengguna yang login
+        // Cek apakah durasi valid (lebih dari 0)
+        if (activityStartTime == 0L) {
+            Log.e("UserActivity_SAVE_DEBUG", "Gagal menyimpan: activityStartTime adalah 0.")
+            Toast.makeText(this, "Gagal menyimpan, waktu mulai tidak valid.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val userId = userManager.UserSession()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = dateFormat.format(Date())
-        val pointsEarned = (finalDistance / 100).toInt() // Contoh: 1 poin tiap 100m
+        val pointsEarned = (finalDistance / 0.01).toInt()
 
         val activityManager = ActivityManager(this)
         activityManager.addActivity(
             userId = userId,
-            type = "General", // Tipe bisa disesuaikan
+            type = "General",
             distance = finalDistance,
             duration = durationInSeconds,
             date = currentDate,
@@ -156,11 +161,11 @@ class UserActivity : AppCompatActivity() {
             vehicle = vehicle
         )
 
+        Log.d("UserActivity_SAVE_DEBUG", "Data berhasil dikirim ke ActivityManager.")
         Toast.makeText(this, "Aktivitas berhasil disimpan!", Toast.LENGTH_LONG).show()
         resetSessionData()
     }
 
-    // DITAMBAH: Fungsi untuk mereset state setelah aktivitas selesai
     private fun resetSessionData() {
         selectedVehicle = null
         activityStartTime = 0L
@@ -168,8 +173,7 @@ class UserActivity : AppCompatActivity() {
         binding.editTextVehicle.text?.clear()
     }
 
-    // --- Manajemen Izin yang Diperbarui ---
-
+    // ... sisa kode manajemen izin tetap sama ...
     private fun hasLocationPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             this, Manifest.permission.ACCESS_FINE_LOCATION
@@ -177,13 +181,12 @@ class UserActivity : AppCompatActivity() {
     }
 
     private fun hasNotificationPermission(): Boolean {
-        // Izin notifikasi hanya diperlukan untuk Android 13 (API 33) ke atas
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ContextCompat.checkSelfPermission(
                 this, Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         } else {
-            true // Dianggap granted untuk versi di bawahnya
+            true
         }
     }
 

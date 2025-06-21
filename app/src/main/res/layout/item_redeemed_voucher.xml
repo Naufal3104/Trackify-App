@@ -8,8 +8,8 @@
     android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="8dp"
-    app:cardBackgroundColor="#34495E"
     app:cardCornerRadius="16dp"
+    app:cardBackgroundColor="@color/White"
     app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,50 +22,45 @@
             android:id="@+id/textViewVoucherTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
+            android:layout_marginEnd="16dp"
+            android:textColor="@android:color/black"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/textViewRedeemedStatus"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Voucher Mie Gacoan 20k (2000 Poin)" />
+            tools:text="Voucher Tomoro Coffee 20k" />
 
-        <!-- Deskripsi Voucher -->
+        <!-- Tanggal Redeem -->
         <TextView
-            android:id="@+id/textViewVoucherDescription"
-            android:layout_width="0dp"
+            android:id="@+id/textViewRedeemedDate"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="#E0E0E0"
-            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textViewVoucherTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Voucher potongan harga untuk semua menu." />
+            tools:text="Diredeem pada 21 Juni 2025" />
 
-        <!-- Stok Poin -->
+        <!-- Status Voucher -->
         <TextView
-            android:id="@+id/textViewPointsStock"
+            android:id="@+id/textViewRedeemedStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:textColor="#E0E0E0"
+            android:background="@drawable/bg_status_used"
+            android:paddingStart="12dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="4dp"
+            android:textColor="@android:color/white"
             android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewVoucherDescription"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="Stok: 10" />
-
-        <!-- Tanggal Kadaluarsa Voucher -->
-        <TextView
-            android:id="@+id/textViewExpiryDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#E0E0E0"
-            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/textViewPointsStock"
-            tools:text="Berlaku hingga 2025-12-31" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Digunakan" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -122,12 +122,8 @@ class ManageUser : AppCompatActivity() {
             if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
                 // Panggil fungsi updateUser dari UserManager
                 // Anda perlu menambahkan fungsi ini di UserManager.kt
-                userManager.updateUser(
+                userManager.updateUserProfileData(
                     selectedUser!!.id, name, email, password,
-                    selectedUser!!.role, // Role tidak diubah dari form ini
-                    selectedUser!!.preferredTransport,
-                    selectedUser!!.totalDistance,
-                    selectedUser!!.rewardPoints
                 )
                 Toast.makeText(this, "Data pengguna berhasil diupdate", Toast.LENGTH_SHORT).show()
                 clearFormAndRefresh()

@@ -171,9 +171,14 @@
 
             <!-- Daftar Aktivitas Terbaru (contoh statis) -->
             <!-- Dalam aplikasi nyata, ini akan menjadi RecyclerView -->
-           <include layout="@layout/item_activity_dashboard"/>
-            <include layout="@layout/item_activity_dashboard"/>
-            <include layout="@layout/item_activity_dashboard"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewRecentActivities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_activity_dashboard"
+                tools:itemCount="3"/>
 
         </LinearLayout>
 
